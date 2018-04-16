@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Paramore.Brighter;
 using Paramore.Darker;
 using SphinxAdventure.Api.Models;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 namespace SphinxAdventure.Api.Controllers
 {
     [Route("api/games")]
+    [Authorize]
     public class GameController : Controller
     {
         private readonly IAmACommandProcessor _commandProcessor;

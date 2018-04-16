@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="litedb" Version="4.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
     <PackageReference Include="Paramore.Brighter.AspNetCore" Version="1.0.0" />
     <PackageReference Include="paramore.darker.aspnetcore" Version="1.1.2" />

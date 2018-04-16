@@ -46,7 +46,7 @@ namespace SphinxAdventure.Api.Controllers
             return new ObjectResult(GenerateToken(request.Username));
         }
 
-        private object GenerateToken(string username)
+        private string GenerateToken(string username)
         {
             var claims = new Claim[]
             {
@@ -57,12 +57,14 @@ namespace SphinxAdventure.Api.Controllers
             };
 
             var secretKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration.GetValue<string>("SecretKey")));
+                Encoding.UTF8.GetBytes(_configuration["SecretKey"]));
 
-            return new JwtSecurityToken(
+            var token = new JwtSecurityToken(
                 new JwtHeader(
                     new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256)), 
                 new JwtPayload(claims));
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
