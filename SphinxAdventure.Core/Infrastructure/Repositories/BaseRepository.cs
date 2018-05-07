@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SphinxAdventure.Core.Repositories
+namespace SphinxAdventure.Core.Infrastructure.Repositories
 {
     public class BaseRepository<TEntity> : IRepository<TEntity>
     {
@@ -39,7 +39,7 @@ namespace SphinxAdventure.Core.Repositories
                 .Resource.ToEntity<TEntity>();
         }
 
-        protected IOrderedQueryable<TEntity> CreateDocumentQuery()
+        public IOrderedQueryable<TEntity> CreateQuery()
         {
             return DocumentClient.CreateDocumentQuery<TEntity>(DocumentCollectionUri);
         }

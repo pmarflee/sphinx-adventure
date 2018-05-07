@@ -5,15 +5,15 @@ namespace SphinxAdventure.Core.Commands
 {
     public class CreateGameCommand : IRequest
     {
-        public CreateGameCommand(string username)
+        public CreateGameCommand(Guid userId)
         {
             Id = Guid.NewGuid();
-            Username = username;
+            UserId = userId;
             CreatedOn = DateTime.Now;
         }
 
         public Guid Id { get; set; }
-        public string Username { get; }
+        public Guid UserId { get; }
         public DateTime CreatedOn { get; set; }
     }
 }

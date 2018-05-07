@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SphinxAdventure.Api.Controllers
 {
     [Route("api/users")]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly IAmACommandProcessor _commandProcessor;
         private readonly IQueryProcessor _queryProcessor;

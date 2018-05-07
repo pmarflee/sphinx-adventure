@@ -1,7 +1,7 @@
 ﻿using Paramore.Brighter;
 using SphinxAdventure.Core.Commands;
 using SphinxAdventure.Core.Entities;
-using SphinxAdventure.Core.Repositories;
+using SphinxAdventure.Core.Infrastructure.Repositories;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,11 +11,11 @@ namespace SphinxAdventure.Core.CommandHandlers
     public class CreateGameCommandHandlerAsync : RequestHandlerAsync<CreateGameCommand>
     {
         private readonly IRepository<Game> _gameRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<User> _userRepository;
 
         public CreateGameCommandHandlerAsync(
             IRepository<Game> gameRepository,
-            IUserRepository userRepository)
+            IRepository<User> userRepository)
         {
             _gameRepository = gameRepository;
             _userRepository = userRepository;
@@ -25,7 +25,7 @@ namespace SphinxAdventure.Core.CommandHandlers
             CreateGameCommand command, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var user = await _userRepository.GetAsync(command.Username);
+            var user = await _userRepository.GetAsync(command.UserId);
 
             if (user == null)
             {

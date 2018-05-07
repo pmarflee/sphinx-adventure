@@ -1,9 +1,7 @@
 ﻿using Paramore.Brighter;
 using SphinxAdventure.Core.Commands;
-using SphinxAdventure.Core.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SphinxAdventure.Core.Entities;
+using SphinxAdventure.Core.Infrastructure.Repositories;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,9 +9,9 @@ namespace SphinxAdventure.Core.CommandHandlers
 {
     public class AuthenticateUserCommandHandlerAsync : RequestHandlerAsync<AuthenticateUserCommand>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<User> _userRepository;
 
-        public AuthenticateUserCommandHandlerAsync(IUserRepository userRepository)
+        public AuthenticateUserCommandHandlerAsync(IRepository<User> userRepository)
         {
             _userRepository = userRepository;
         }
@@ -22,7 +20,7 @@ namespace SphinxAdventure.Core.CommandHandlers
             AuthenticateUserCommand command, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var user = await _userRepository.GetAsync(command.Username);
+            var user = await _userRepository.GetByUsernameAsync(command.Username);
 
             if (user != null)
             {

@@ -5,6 +5,7 @@ using Paramore.Brighter;
 using Paramore.Darker;
 using SphinxAdventure.Api.Models;
 using SphinxAdventure.Core.Commands;
+using SphinxAdventure.Core.Queries;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 namespace SphinxAdventure.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class TokenController : Controller
+    public class TokenController : BaseController
     {
         private readonly IConfiguration _configuration;
         private readonly IAmACommandProcessor _commandProcessor;
@@ -43,15 +44,18 @@ namespace SphinxAdventure.Api.Controllers
                 return BadRequest(new { Message = "Invalid username or password" });
             }
 
-            return new ObjectResult(GenerateToken(request.Username));
+            var user = await _queryProcessor.ExecuteAsync(new GetUserQuery(request.Username));
+
+            return new ObjectResult(GenerateToken(user));
         }
 
-        private string GenerateToken(string username)
+        private string GenerateToken(Core.Entities.User user)
         {
             var claims = new Claim[]
             {
-                new Claim(ClaimTypes.Name, username),
-                new Claim(JwtRegisteredClaimNames.Email, username),
+                new Claim("UserId", user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(JwtRegisteredClaimNames.Email, user.Username),
                 new Claim(JwtRegisteredClaimNames.Exp, $"{new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds()}"),
                 new Claim(JwtRegisteredClaimNames.Nbf, $"{new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds()}")
             };

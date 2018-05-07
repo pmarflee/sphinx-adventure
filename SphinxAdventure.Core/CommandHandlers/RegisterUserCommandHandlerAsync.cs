@@ -1,10 +1,7 @@
 ﻿using Paramore.Brighter;
 using SphinxAdventure.Core.Commands;
 using SphinxAdventure.Core.Entities;
-using SphinxAdventure.Core.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SphinxAdventure.Core.Infrastructure.Repositories;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,9 +9,9 @@ namespace SphinxAdventure.Core.CommandHandlers
 {
     public class RegisterUserCommandHandlerAsync : RequestHandlerAsync<RegisterUserCommand>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<User> _userRepository;
 
-        public RegisterUserCommandHandlerAsync(IUserRepository userRepository)
+        public RegisterUserCommandHandlerAsync(IRepository<User> userRepository)
         {
             _userRepository = userRepository;
         }
@@ -23,7 +20,7 @@ namespace SphinxAdventure.Core.CommandHandlers
             RegisterUserCommand command, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var existingUser = await _userRepository.GetAsync(command.Username);
+            var existingUser = await _userRepository.GetByUsernameAsync(command.Username);
 
             if (existingUser == null)
             {

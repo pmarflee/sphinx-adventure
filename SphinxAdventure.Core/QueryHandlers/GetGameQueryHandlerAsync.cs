@@ -1,7 +1,7 @@
 ﻿using Paramore.Darker;
 using SphinxAdventure.Core.Entities;
 using SphinxAdventure.Core.Queries;
-using SphinxAdventure.Core.Repositories;
+using SphinxAdventure.Core.Infrastructure.Repositories;
 using System.Threading;
 using System.Threading.Tasks;
 

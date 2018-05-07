@@ -16,7 +16,7 @@ using SphinxAdventure.Core.CommandHandlers;
 using SphinxAdventure.Core.Entities;
 using SphinxAdventure.Core.Infrastructure;
 using SphinxAdventure.Core.QueryHandlers;
-using SphinxAdventure.Core.Repositories;
+using SphinxAdventure.Core.Infrastructure.Repositories;
 
 namespace SphinxAdventure.Api
 {
@@ -79,7 +79,7 @@ namespace SphinxAdventure.Api
                     });
             });
             services.AddSingleton<IRepository<Game>, GameRepository>();
-            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IRepository<SphinxAdventure.Core.Entities.User>, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

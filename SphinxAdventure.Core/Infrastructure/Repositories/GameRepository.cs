@@ -2,7 +2,7 @@
 using SphinxAdventure.Core.Entities;
 using SphinxAdventure.Core.Infrastructure;
 
-namespace SphinxAdventure.Core.Repositories
+namespace SphinxAdventure.Core.Infrastructure.Repositories
 {
     public class GameRepository : BaseRepository<Game>
     {
