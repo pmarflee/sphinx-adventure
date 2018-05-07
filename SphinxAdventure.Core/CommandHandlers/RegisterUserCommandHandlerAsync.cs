@@ -29,11 +29,13 @@ namespace SphinxAdventure.Core.CommandHandlers
             {
                 var newUser = new User
                 {
+                    Id = command.Id,
                     Username = command.Username,
-                    Password = BCrypt.Net.BCrypt.HashPassword(command.Password)
+                    Password = BCrypt.Net.BCrypt.HashPassword(command.Password),
+                    CreatedOn = command.CreatedOn
                 };
 
-                await _userRepository.InsertAsync(newUser);
+                await _userRepository.SaveAsync(newUser);
 
                 command.UserRegistered = true;
             }

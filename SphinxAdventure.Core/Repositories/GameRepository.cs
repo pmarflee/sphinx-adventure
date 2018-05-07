@@ -1,27 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
-using LiteDB;
+﻿using Microsoft.Azure.Documents;
 using SphinxAdventure.Core.Entities;
+using SphinxAdventure.Core.Infrastructure;
 
 namespace SphinxAdventure.Core.Repositories
 {
-    public class GameRepository : IGameRepository
+    public class GameRepository : BaseRepository<Game>
     {
-        private readonly LiteRepository _repository;
-
-        public GameRepository(LiteRepository repository)
+        public GameRepository(IDocumentClient documentClient, CosmosDbConfiguration config)
+            : base(documentClient, config, "Games")
         {
-            _repository = repository;
-        }
-
-        public async Task<Game> GetAsync(Guid id)
-        {
-            return _repository.Single<Game>(game => game.Id == id);
-        }
-
-        public async Task InsertAsync(Game game)
-        {
-            _repository.Insert(game);
         }
     }
 }

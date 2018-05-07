@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 
 namespace SphinxAdventure.Core.Repositories
 {
-    public interface IUserRepository
+    public interface IUserRepository : IRepository<User>
     {
         Task<User> GetAsync(string username);
-        Task InsertAsync(User user);
     }
 }

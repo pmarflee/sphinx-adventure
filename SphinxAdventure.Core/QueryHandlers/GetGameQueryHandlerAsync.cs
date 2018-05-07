@@ -9,9 +9,9 @@ namespace SphinxAdventure.Core.QueryHandlers
 {
     public class GetGameQueryHandlerAsync : QueryHandlerAsync<GetGameQuery, Game>
     {
-        private readonly IGameRepository _gameRepository;
+        private readonly IRepository<Game> _gameRepository;
 
-        public GetGameQueryHandlerAsync(IGameRepository gameRepository)
+        public GetGameQueryHandlerAsync(IRepository<Game> gameRepository)
         {
             _gameRepository = gameRepository;
         }

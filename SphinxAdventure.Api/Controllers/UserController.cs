@@ -40,8 +40,13 @@ namespace SphinxAdventure.Api.Controllers
                 return BadRequest(new { Message = "User could not be registered" });
             }
 
-            return CreatedAtAction("GetUser", new { Id = user.Username },
-                new User { Username = user.Username });
+            return CreatedAtAction("GetUser", new { registerUserCommand.Id },
+                new User
+                {
+                    Id = registerUserCommand.Id,
+                    Username = user.Username,
+                    CreatedOn = registerUserCommand.CreatedOn 
+                });
         }
     }
 }

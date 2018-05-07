@@ -9,11 +9,14 @@ namespace SphinxAdventure.Core.Commands
         {
             Username = username;
             Password = password;
+            Id = Guid.NewGuid();
+            CreatedOn = DateTime.Now;
         }
 
         public Guid Id { get; set; }
         public string Username { get; }
         public string Password { get; }
+        public DateTime CreatedOn { get; set; }
 
         public bool UserRegistered { get; set; }
     }

@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using LiteDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Paramore.Brighter.AspNetCore;
 using Paramore.Darker.AspNetCore;
 using SphinxAdventure.Core.CommandHandlers;
+using SphinxAdventure.Core.Entities;
+using SphinxAdventure.Core.Infrastructure;
 using SphinxAdventure.Core.QueryHandlers;
 using SphinxAdventure.Core.Repositories;
 
@@ -66,10 +66,20 @@ namespace SphinxAdventure.Api
                 };
             });
 
-            services.AddScoped(sp => new LiteRepository(
-                Configuration.GetConnectionString("LiteDB")));
-            services.AddScoped<IGameRepository, GameRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddSingleton(
+                Configuration.GetSection("CosmosDB").Get<CosmosDbConfiguration>());
+
+            services.AddSingleton<IDocumentClient, DocumentClient>(svp =>
+            {
+                var config = svp.GetService<CosmosDbConfiguration>();
+                return new DocumentClient(new Uri(config.AccountEndpoint), config.AccountKeys,
+                    new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
+            });
+            services.AddSingleton<IRepository<Game>, GameRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

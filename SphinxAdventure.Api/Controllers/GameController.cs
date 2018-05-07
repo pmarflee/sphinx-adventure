@@ -34,13 +34,17 @@ namespace SphinxAdventure.Api.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> Create()
         {
-            var command = new CreateGameCommand();
+            var command = new CreateGameCommand(User.Identity.Name);
             await _commandProcessor.SendAsync(command);
 
             var gameEntity = await _queryProcessor.ExecuteAsync(new GetGameQuery(command.Id));
-            var gameModel = new Game { Id = gameEntity.Id };
+            var gameModel = new Game
+            {
+                Id = gameEntity.Id,
+                CreatedOn = command.CreatedOn
+            };
 
-            return CreatedAtAction("GetGame", new { command.Id }, gameModel);
+            return CreatedAtAction("GetGame", new { gameEntity.Id }, gameModel);
         }
     }
 }

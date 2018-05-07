@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using LiteDB;
-using SphinxAdventure.Core.Entities;
+using Microsoft.Azure.Documents;
+using SphinxAdventure.Core.Infrastructure;
 
 namespace SphinxAdventure.Core.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository<Entities.User>, IUserRepository
     {
-        private readonly LiteRepository _liteRepository;
-
-        public UserRepository(LiteRepository liteRepository)
+        public UserRepository(IDocumentClient documentClient, CosmosDbConfiguration config)
+            : base(documentClient, config, "Users")
         {
-            _liteRepository = liteRepository;
         }
 
-        public async Task<User> GetAsync(string username)
+        public async Task<Entities.User> GetAsync(string username)
         {
-            return _liteRepository.SingleOrDefault<User>(user => user.Username == username);
-        }
+            var users = await CreateDocumentQuery()
+                .Where(user => user.Username == username)
+                .ToListAsync();
 
-        public async Task InsertAsync(User user)
-        {
-            _liteRepository.Insert(user);
+            return users.FirstOrDefault();
         }
     }
 }
