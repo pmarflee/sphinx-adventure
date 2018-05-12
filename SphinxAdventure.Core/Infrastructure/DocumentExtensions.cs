@@ -6,7 +6,7 @@ namespace SphinxAdventure.Core.Infrastructure
     {
         public static TEntity ToEntity<TEntity>(this Document document)
         {
-            return (TEntity)(dynamic)document;
+            return (dynamic)document;
         }
     }
 }
