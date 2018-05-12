@@ -1,5 +1,4 @@
 ﻿using Microsoft.Azure.Documents;
-using SphinxAdventure.Core.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 

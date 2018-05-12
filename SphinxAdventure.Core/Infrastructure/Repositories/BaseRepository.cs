@@ -1,6 +1,5 @@
 ﻿using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using SphinxAdventure.Core.Infrastructure;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
