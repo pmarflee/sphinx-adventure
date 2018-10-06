@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Paramore.Brighter.AspNetCore;
 using Paramore.Darker.AspNetCore;
 using SphinxAdventure.Core.CommandHandlers;
@@ -17,6 +16,7 @@ using SphinxAdventure.Core.Entities;
 using SphinxAdventure.Core.Infrastructure;
 using SphinxAdventure.Core.QueryHandlers;
 using SphinxAdventure.Core.Infrastructure.Repositories;
+using JsonNet.PrivateSettersContractResolvers;
 
 namespace SphinxAdventure.Api
 {
@@ -75,11 +75,11 @@ namespace SphinxAdventure.Api
                 return new DocumentClient(new Uri(config.AccountEndpoint), config.AccountKeys,
                     new JsonSerializerSettings
                     {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        ContractResolver = new PrivateSetterCamelCasePropertyNamesContractResolver()
                     });
             });
             services.AddSingleton<IRepository<Game>, GameRepository>();
-            services.AddSingleton<IRepository<SphinxAdventure.Core.Entities.User>, UserRepository>();
+            services.AddSingleton<IRepository<Core.Entities.User>, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

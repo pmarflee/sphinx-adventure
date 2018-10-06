@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="2.1.3" />
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="1.9.1" />
+    <PackageReference Include="newtonsoft.json" Version="11.0.2" />
     <PackageReference Include="paramore.brighter" Version="7.1.0" />
     <PackageReference Include="paramore.darker" Version="1.1.0" />
   </ItemGroup>
