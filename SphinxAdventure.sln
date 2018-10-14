@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SphinxAdventure.Api", "Sphi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SphinxAdventure.Tests", "SphinxAdventure.Tests\SphinxAdventure.Tests.csproj", "{97BE0EE4-2FF7-44AE-9FE0-D2784B83ACA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SphinxAdventure.Core", "SphinxAdventure.Core\SphinxAdventure.Core.csproj", "{B6B8287D-FEAD-4CD5-A4B1-9EA64E37830F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SphinxAdventure.Core", "SphinxAdventure.Core\SphinxAdventure.Core.csproj", "{B6B8287D-FEAD-4CD5-A4B1-9EA64E37830F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

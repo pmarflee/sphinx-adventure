@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SphinxAdventure.Core.Entities
 {
-    public class Map
+    public class Map : Entity
     {
         public Map() { }
 

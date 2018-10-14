@@ -32,7 +32,7 @@ namespace SphinxAdventure.Api.Controllers
             var games = await _queryProcessor.ExecuteAsync(new GetGamesQuery(UserId));
             var gameModels = games.Select(game => new Game
             {
-                Id = game.Id,
+                Id = game.EntityId,
                 CreatedOn = game.CreatedOn
             });
 
@@ -45,7 +45,7 @@ namespace SphinxAdventure.Api.Controllers
             var game = await _queryProcessor.ExecuteAsync(new GetGameQuery(id));
             var gameModel = new Game
             {
-                Id = game.Id,
+                Id = game.EntityId,
                 CreatedOn = game.CreatedOn
             };
 
@@ -61,11 +61,11 @@ namespace SphinxAdventure.Api.Controllers
             var gameEntity = await _queryProcessor.ExecuteAsync(new GetGameQuery(command.Id));
             var gameModel = new Game
             {
-                Id = gameEntity.Id,
+                Id = gameEntity.EntityId,
                 CreatedOn = command.CreatedOn
             };
 
-            return CreatedAtAction("GetGame", new { gameEntity.Id }, gameModel);
+            return CreatedAtAction("GetGame", new { Id = gameEntity.EntityId }, gameModel);
         }
     }
 }

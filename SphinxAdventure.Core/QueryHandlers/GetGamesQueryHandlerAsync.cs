@@ -34,9 +34,7 @@ namespace SphinxAdventure.Core.QueryHandlers
                 throw new Exception("User not found");
             }
 
-            return await _gameRepository.CreateQuery()
-                .Where(game => game.UserId == user.Id)
-                .ToListAsync();
+            return await _gameRepository.GetAllByUserAsync(user);
         }
     }
 }

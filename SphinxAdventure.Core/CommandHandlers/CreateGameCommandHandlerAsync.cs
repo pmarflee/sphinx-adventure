@@ -23,7 +23,7 @@ namespace SphinxAdventure.Core.CommandHandlers
         {
             var game = new Game
             {
-                Id = command.Id,
+                EntityId = command.Id,
                 UserId = command.UserId,
                 CreatedOn = command.CreatedOn
             };

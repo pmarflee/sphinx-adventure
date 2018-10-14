@@ -53,7 +53,7 @@ namespace SphinxAdventure.Api.Controllers
         {
             var claims = new Claim[]
             {
-                new Claim("UserId", user.Id.ToString()),
+                new Claim("UserId", user.EntityId.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Username),
                 new Claim(JwtRegisteredClaimNames.Exp, $"{new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds()}"),

@@ -1,13 +1,11 @@
-﻿using Microsoft.Azure.Documents;
-using SphinxAdventure.Core.Entities;
+﻿using SphinxAdventure.Core.Entities;
+using YesSql;
 
 namespace SphinxAdventure.Core.Infrastructure.Repositories
 {
-    public class MapRepository : BaseRepository<Map>
+    public class MapRepository : BaseRepository<Map, Indexes.MappedIndexes.MapById>
     {
-        protected MapRepository(
-            IDocumentClient documentClient, 
-            CosmosDbConfiguration config) : base(documentClient, config, "Maps")
+        protected MapRepository(IStore store) : base(store)
         {
         }
     }

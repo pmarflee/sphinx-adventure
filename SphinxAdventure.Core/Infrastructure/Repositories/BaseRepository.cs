@@ -1,95 +1,41 @@
-﻿using Microsoft.Azure.Documents;
-using Microsoft.Azure.Documents.Client;
-using System;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
+using YesSql;
 
 namespace SphinxAdventure.Core.Infrastructure.Repositories
 {
-    public class BaseRepository<TEntity> : IRepository<TEntity>
+    public class BaseRepository<TEntity, TEntityByIdIndex> : IRepository<TEntity>
+        where TEntity : class
+        where TEntityByIdIndex : Indexes.MappedIndexes.EntityById
     {
-        protected readonly IDocumentClient DocumentClient;
-        private readonly CosmosDbConfiguration _config;
-        protected readonly string CollectionId;
-        protected readonly Uri DocumentCollectionUri;
+        protected IStore Store { get; }
 
-        protected BaseRepository(
-            IDocumentClient documentClient, CosmosDbConfiguration config, string collectionId)
+        protected BaseRepository(IStore store)
         {
-            DocumentClient = documentClient;
-            _config = config;
-            CollectionId = collectionId;
-            DocumentCollectionUri = UriFactory.CreateDocumentCollectionUri(
-                _config.Database, CollectionId);
-
-            CreateDatabaseIfNotExistsAsync().Wait();
-            CreateCollectionIfNotExistsAsync().Wait();
+            Store = store;
         }
+
+        public ISession CreateSession() => Store.CreateSession();
 
         public async Task<TEntity> GetAsync(Guid id)
         {
-            return (await DocumentClient.ReadDocumentAsync(CreateDocumentUri(id)))
-                .Resource.ToEntity<TEntity>();
+            using (var session = Store.CreateSession())
+            {
+                return await session.Query<TEntity, TEntityByIdIndex>()
+                    .Where(index => index.EntityId == id).FirstOrDefaultAsync();
+            }
         }
                 
         public async Task<TEntity> SaveAsync(TEntity entity)
         {
-            return (await DocumentClient.UpsertDocumentAsync(DocumentCollectionUri, entity))
-                .Resource.ToEntity<TEntity>();
-        }
-
-        public IOrderedQueryable<TEntity> CreateQuery()
-        {
-            return DocumentClient.CreateDocumentQuery<TEntity>(DocumentCollectionUri);
-        }
-
-        private Uri CreateDocumentUri(Guid id)
-        {
-            return UriFactory.CreateDocumentUri(
-                _config.Database, CollectionId, id.ToString());
-        }
-
-        private async Task CreateDatabaseIfNotExistsAsync()
-        {
-            try
+            using (var session = Store.CreateSession())
             {
-                await DocumentClient.ReadDatabaseAsync(UriFactory.CreateDatabaseUri(
-                    _config.Database));
-            }
-            catch (DocumentClientException e)
-            {
-                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    await DocumentClient.CreateDatabaseAsync(new Database
-                    { Id = _config.Database });
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
+                session.Save(entity);
 
-        private async Task CreateCollectionIfNotExistsAsync()
-        {
-            try
-            {
-                await DocumentClient.ReadDocumentCollectionAsync(DocumentCollectionUri);
+                await session.CommitAsync();
             }
-            catch (DocumentClientException e)
-            {
-                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    await DocumentClient.CreateDocumentCollectionAsync(
-                        UriFactory.CreateDatabaseUri(_config.Database),
-                        new DocumentCollection { Id = CollectionId },
-                        new RequestOptions { OfferThroughput = 1000 });
-                }
-                else
-                {
-                    throw;
-                }
-            }
+
+            return entity;
         }
     }
 }

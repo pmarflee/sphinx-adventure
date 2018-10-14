@@ -1,13 +1,12 @@
-﻿using Microsoft.Azure.Documents;
-using System.Linq;
+﻿using SphinxAdventure.Core.Infrastructure.Indexes.MappedIndexes;
 using System.Threading.Tasks;
+using YesSql;
 
 namespace SphinxAdventure.Core.Infrastructure.Repositories
 {
-    public class UserRepository : BaseRepository<Entities.User>
+    public class UserRepository : BaseRepository<Entities.User, UserById>
     {
-        public UserRepository(IDocumentClient documentClient, CosmosDbConfiguration config)
-            : base(documentClient, config, "Users")
+        public UserRepository(IStore store) : base(store)
         {
         }
     }
@@ -17,10 +16,12 @@ namespace SphinxAdventure.Core.Infrastructure.Repositories
         public static async Task<Entities.User> GetByUsernameAsync(
             this IRepository<Entities.User> repository, string username)
         {
-            return (await repository.CreateQuery()
-                .Where(user => user.Username == username)
-                .ToListAsync())
-                .FirstOrDefault();
+            using (var session = repository.CreateSession())
+            {
+                return await session
+                    .Query<Entities.User, UserByUsername>(index => index.Username == username)
+                    .FirstOrDefaultAsync();
+            }
         }
     }
 }

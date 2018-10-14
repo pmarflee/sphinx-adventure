@@ -1,17 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 
 namespace SphinxAdventure.Core.Entities
 {
-    public class Game
+    public class Game : Entity
     {
-        [JsonProperty("id")]
-        public Guid Id { get; set; }
-
-        [JsonProperty("userid")]
         public Guid UserId { get; set; }
 
-        [JsonProperty("createdon")]
         public DateTime CreatedOn { get; set; }
     }
 }

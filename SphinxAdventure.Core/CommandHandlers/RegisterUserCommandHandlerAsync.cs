@@ -26,7 +26,7 @@ namespace SphinxAdventure.Core.CommandHandlers
             {
                 var newUser = new User
                 {
-                    Id = command.Id,
+                    EntityId = command.Id,
                     Username = command.Username,
                     Password = BCrypt.Net.BCrypt.HashPassword(command.Password),
                     CreatedOn = command.CreatedOn
