@@ -10,7 +10,7 @@ namespace SphinxAdventure.Api.Controllers
         {
             get
             {
-                return Guid.Parse(User.Claims.First(c => c.Type == "UserId").Value);
+                return Guid.Parse(User.Claims.First(c => c.Type == nameof(UserId)).Value);
             }
         }
     }
