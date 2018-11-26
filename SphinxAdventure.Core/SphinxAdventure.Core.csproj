@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Maps\sphinx-adventure.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Maps\sphinx-adventure.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="3.1.0" />
     <PackageReference Include="newtonsoft.json" Version="11.0.2" />
     <PackageReference Include="paramore.brighter" Version="7.4.2" />

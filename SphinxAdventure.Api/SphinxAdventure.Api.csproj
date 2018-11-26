@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Map.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="database\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>

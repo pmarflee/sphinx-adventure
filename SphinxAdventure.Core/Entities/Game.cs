@@ -7,5 +7,9 @@ namespace SphinxAdventure.Core.Entities
         public Guid UserId { get; set; }
 
         public DateTime CreatedOn { get; set; }
+
+        public Map Map { get; set; }
+
+        public Location Location { get; set; }
     }
 }

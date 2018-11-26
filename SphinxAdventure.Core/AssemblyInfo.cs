@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("SphinxAdventure.Tests")]
+[assembly: InternalsVisibleTo("SphinxAdventure.Tests")]

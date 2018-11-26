@@ -1,0 +1,24 @@
+{
+  "locations": {
+    "mountain_top": {
+      "description": "You are on the top of a mountain. In the distance a small building can be seen. All around you is dense forest. A road leads north.",
+      "exits": {
+        "n": "raised_path",
+        "s": "forest",
+        "w": "forest",
+        "e": "forest"
+      },
+      "items": []
+    },
+    "raised_path": {
+      "description": "You are on the road, a small raised path leads east, the road runs north-south.",
+      "exits": {
+        "n": "end_of_road",
+        "s": "mountain_top",
+        "e": "narrow_path",
+        "w": "forest"
+      },
+      "items": [ "bottle" ]
+    }
+  }
+}
