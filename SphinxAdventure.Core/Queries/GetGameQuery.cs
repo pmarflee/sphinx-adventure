@@ -1,5 +1,5 @@
 ﻿using Paramore.Darker;
-using SphinxAdventure.Core.Entities;
+using SphinxAdventure.Core.DTOs;
 using System;
 
 namespace SphinxAdventure.Core.Queries

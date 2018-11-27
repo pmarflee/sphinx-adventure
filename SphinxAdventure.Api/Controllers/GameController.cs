@@ -30,42 +30,29 @@ namespace SphinxAdventure.Api.Controllers
         public async Task<IActionResult> GetGames()
         {
             var games = await _queryProcessor.ExecuteAsync(new GetGamesQuery(UserId));
-            var gameModels = games.Select(game => new Game
-            {
-                Id = game.EntityId,
-                CreatedOn = game.CreatedOn
-            });
 
-            return Ok(gameModels);
+            return Ok(games);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGame(Guid id)
         {
             var game = await _queryProcessor.ExecuteAsync(new GetGameQuery(id));
-            var gameModel = new Game
-            {
-                Id = game.EntityId,
-                CreatedOn = game.CreatedOn
-            };
 
-            return Ok(gameModel);
+            return Ok(game);
         }
 
         [HttpPost("")]
         public async Task<IActionResult> Create()
         {
             var command = new CreateGameCommand(UserId);
+
             await _commandProcessor.SendAsync(command);
 
-            var gameEntity = await _queryProcessor.ExecuteAsync(new GetGameQuery(command.Id));
-            var gameModel = new Game
-            {
-                Id = gameEntity.EntityId,
-                CreatedOn = command.CreatedOn
-            };
-
-            return CreatedAtAction("GetGame", new { Id = gameEntity.EntityId }, gameModel);
+            return CreatedAtAction(
+                "GetGame", 
+                new { command.Id }, 
+                new { command.Id, command.CreatedOn });
         }
     }
 }

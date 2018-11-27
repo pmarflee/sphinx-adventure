@@ -1,5 +1,4 @@
 ﻿using Paramore.Darker;
-using SphinxAdventure.Core.Entities;
 using SphinxAdventure.Core.Queries;
 using SphinxAdventure.Core.Infrastructure.Repositories;
 using System.Threading;
@@ -7,20 +6,26 @@ using System.Threading.Tasks;
 
 namespace SphinxAdventure.Core.QueryHandlers
 {
-    public class GetGameQueryHandlerAsync : QueryHandlerAsync<GetGameQuery, Game>
+    public class GetGameQueryHandlerAsync : QueryHandlerAsync<GetGameQuery, DTOs.Game>
     {
-        private readonly IRepository<Game> _gameRepository;
+        private readonly IRepository<Entities.Game> _gameRepository;
 
-        public GetGameQueryHandlerAsync(IRepository<Game> gameRepository)
+        public GetGameQueryHandlerAsync(IRepository<Entities.Game> gameRepository)
         {
             _gameRepository = gameRepository;
         }
 
-        public override async Task<Game> ExecuteAsync(
+        public override async Task<DTOs.Game> ExecuteAsync(
             GetGameQuery query, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await _gameRepository.GetAsync(query.Id);
+            var gameEntity = await _gameRepository.GetAsync(query.Id);
+
+            return new DTOs.Game
+            {
+                Id = gameEntity.EntityId,
+                CreatedOn = gameEntity.CreatedOn
+            };
         }
     }
 }
