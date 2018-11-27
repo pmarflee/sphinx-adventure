@@ -52,7 +52,7 @@ namespace SphinxAdventure.Api.Controllers
             return Ok(gameModel);
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("")]
         public async Task<IActionResult> Create()
         {
             var command = new CreateGameCommand(UserId);
