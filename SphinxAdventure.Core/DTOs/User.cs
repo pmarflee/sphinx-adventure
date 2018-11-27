@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SphinxAdventure.Api.Models
+namespace SphinxAdventure.Core.DTOs
 {
     public class User
     {

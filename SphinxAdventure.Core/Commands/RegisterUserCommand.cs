@@ -3,9 +3,9 @@ using System;
 
 namespace SphinxAdventure.Core.Commands
 {
-    public class RegisterUserCommand : IRequest
+    public class CreateUserCommand : IRequest
     {
-        public RegisterUserCommand(string username, string password)
+        public CreateUserCommand(string username, string password)
         {
             Username = username;
             Password = password;

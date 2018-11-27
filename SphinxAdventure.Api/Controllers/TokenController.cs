@@ -44,16 +44,16 @@ namespace SphinxAdventure.Api.Controllers
                 return BadRequest(new { Message = "Invalid username or password" });
             }
 
-            var user = await _queryProcessor.ExecuteAsync(new GetUserQuery(request.Username));
+            var user = await _queryProcessor.ExecuteAsync(new GetUserByUsernameQuery(request.Username));
 
             return new ObjectResult(GenerateToken(user));
         }
 
-        private string GenerateToken(Core.Entities.User user)
+        private string GenerateToken(Core.DTOs.User user)
         {
             var claims = new Claim[]
             {
-                new Claim("UserId", user.EntityId.ToString()),
+                new Claim("UserId", user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Username),
                 new Claim(JwtRegisteredClaimNames.Exp, $"{new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds()}"),

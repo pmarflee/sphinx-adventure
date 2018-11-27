@@ -1,13 +1,12 @@
 ﻿using Paramore.Darker;
-using SphinxAdventure.Core.Entities;
 
 namespace SphinxAdventure.Core.Queries
 {
-    public sealed class GetUserQuery : IQuery<User>
+    public sealed class GetUserByUsernameQuery : IQuery<DTOs.User>
     {
         public string Username { get; }
 
-        public GetUserQuery(string username)
+        public GetUserByUsernameQuery(string username)
         {
             Username = username;
         }

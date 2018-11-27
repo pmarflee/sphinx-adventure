@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Paramore.Brighter;
 using Paramore.Darker;
 using SphinxAdventure.Api.Models;
 using SphinxAdventure.Core.Commands;
+using SphinxAdventure.Core.DTOs;
+using SphinxAdventure.Core.Queries;
 using System;
 using System.Threading.Tasks;
 
@@ -23,30 +26,27 @@ namespace SphinxAdventure.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<User> GetUser(string username)
+        [Authorize]
+        public async Task<User> GetUser(Guid id)
         {
-            throw new NotImplementedException();
+            return await _queryProcessor.ExecuteAsync(new GetUserByIdQuery(id));
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Register([FromBody] User user)
+        [HttpPost("")]
+        public async Task<IActionResult> Create([FromBody] User user)
         {
-            var registerUserCommand = new RegisterUserCommand(user.Username, user.Password);
+            var registerUserCommand = new CreateUserCommand(user.Username, user.Password);
 
             await _commandProcessor.SendAsync(registerUserCommand);
 
             if (!registerUserCommand.UserRegistered)
             {
-                return BadRequest(new { Message = "User could not be registered" });
+                return BadRequest(new { Message = "User could not be created" });
             }
 
-            return CreatedAtAction("GetUser", new { registerUserCommand.Id },
-                new User
-                {
-                    Id = registerUserCommand.Id,
-                    Username = user.Username,
-                    CreatedOn = registerUserCommand.CreatedOn 
-                });
+            var responseObject = new { registerUserCommand.Id };
+
+            return CreatedAtAction("GetUser", responseObject, responseObject);
         }
     }
 }

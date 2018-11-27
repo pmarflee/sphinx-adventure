@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace SphinxAdventure.Core.CommandHandlers
 {
-    public class RegisterUserCommandHandlerAsync : RequestHandlerAsync<RegisterUserCommand>
+    public class CreateUserCommandHandlerAsync : RequestHandlerAsync<CreateUserCommand>
     {
         private readonly IRepository<User> _userRepository;
 
-        public RegisterUserCommandHandlerAsync(IRepository<User> userRepository)
+        public CreateUserCommandHandlerAsync(IRepository<User> userRepository)
         {
             _userRepository = userRepository;
         }
 
-        public async override Task<RegisterUserCommand> HandleAsync(
-            RegisterUserCommand command, 
+        public async override Task<CreateUserCommand> HandleAsync(
+            CreateUserCommand command, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var existingUser = await _userRepository.GetByUsernameAsync(command.Username);
