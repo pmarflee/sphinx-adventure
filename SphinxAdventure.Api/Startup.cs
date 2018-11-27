@@ -20,6 +20,7 @@ using YesSql;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using SphinxAdventure.Core.Factories;
 
 namespace SphinxAdventure.Api
 {
@@ -74,6 +75,7 @@ namespace SphinxAdventure.Api
 
             services.AddSingleton<IRepository<Game>, GameRepository>();
             services.AddSingleton<IRepository<User>, UserRepository>();
+            services.AddSingleton<IFactory<Map>, MapFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
