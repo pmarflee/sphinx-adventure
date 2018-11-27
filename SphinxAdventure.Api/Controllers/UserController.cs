@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Paramore.Brighter;
 using Paramore.Darker;
-using SphinxAdventure.Api.Models;
 using SphinxAdventure.Core.Commands;
 using SphinxAdventure.Core.DTOs;
 using SphinxAdventure.Core.Queries;

@@ -1,4 +1,4 @@
-﻿namespace SphinxAdventure.Api.Models
+﻿namespace SphinxAdventure.Core.DTOs
 {
     public class GetTokenRequest
     {
