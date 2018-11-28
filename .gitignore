@@ -237,6 +237,5 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
-/SphinxAdventure.Api/database/SphinxAdventure.db
-/SphinxAdventure.Api/LiteDB.Shell.exe
-/SphinxAdventure.Api/LiteDB.dll
+
+/SphinxAdventure.Api/database/sphinx.db

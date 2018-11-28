@@ -3,7 +3,6 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Paramore.Brighter.AspNetCore;
@@ -12,26 +11,32 @@ using SphinxAdventure.Core.CommandHandlers;
 using SphinxAdventure.Core.Entities;
 using SphinxAdventure.Core.QueryHandlers;
 using SphinxAdventure.Core.Infrastructure.Repositories;
-using YesSql.Provider.SqlServer;
 using SphinxAdventure.Core.Infrastructure.Indexes.IndexProviders;
 using YesSql.Sql;
 using SphinxAdventure.Core.Infrastructure.Indexes.MappedIndexes;
 using YesSql;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using SphinxAdventure.Core.Factories;
+using YesSql.Provider.Sqlite;
+using System.IO;
 
 namespace SphinxAdventure.Api
 {
     public class Startup
     {
-        public Startup(Microsoft.Extensions.Configuration.IConfiguration configuration)
+        public Startup(
+            Microsoft.Extensions.Configuration.IConfiguration configuration,
+            IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            HostingEnvironment = hostingEnvironment;
+            DatabaseFilePath = $@"{HostingEnvironment.ContentRootPath}\database\sphinx.db";
         }
 
         public Microsoft.Extensions.Configuration.IConfiguration Configuration { get; }
+        public IHostingEnvironment HostingEnvironment { get; }
+        public string DatabaseFilePath { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -70,8 +75,7 @@ namespace SphinxAdventure.Api
                 };
             });
 
-            services.AddDbProvider(config =>
-                config.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbProvider(config => config.UseSqLite($"Data Source={DatabaseFilePath}"));
 
             services.AddSingleton<IRepository<Game>, GameRepository>();
             services.AddSingleton<IRepository<User>, UserRepository>();
@@ -90,18 +94,18 @@ namespace SphinxAdventure.Api
 
             app.UseMvc();
 
-            app.InitializeYesSql();
+            app.InitializeYesSql(DatabaseFilePath);
         }
     }
 
     static class YesSqlApplicationBuilderExtensions
     {
-        public static void InitializeYesSql(this IApplicationBuilder app)
+        public static void InitializeYesSql(this IApplicationBuilder app, string databaseFilePath)
         {
             var serviceProvider = app.ApplicationServices;
             var store = serviceProvider.GetService<IStore>();
 
-            if (!store.IsDatabaseInitialized())
+            if (!store.IsDatabaseInitialized(databaseFilePath))
             {
                 store.InitializeAsync().GetAwaiter().GetResult();
             }
@@ -113,8 +117,10 @@ namespace SphinxAdventure.Api
             store.RegisterIndexes(typeof(UserIndexProvider).Assembly);
         }
 
-        private static bool IsDatabaseInitialized(this IStore store)
+        private static bool IsDatabaseInitialized(this IStore store, string path)
         {
+            CreateDatabaseIfNotExists(path);
+
             return DoesTableExist(store, "Document");
         }
 
@@ -128,6 +134,15 @@ namespace SphinxAdventure.Api
             foreach (var type in derivedEntityByIdTypes)
             {
                 store.TryCreateIndex<Guid>(type, nameof(Entity.EntityId));
+            }
+        }
+
+        private static void CreateDatabaseIfNotExists(string path)
+        {
+            if (!File.Exists(path))
+            {
+                var fs = File.Create(path);
+                fs.Close();
             }
         }
 
@@ -181,24 +196,18 @@ namespace SphinxAdventure.Api
 
                 using (var command = connection.CreateCommand())
                 {
-                    var outputParam = new SqlParameter("@Output", SqlDbType.Int)
+                    command.CommandText = $"SELECT name FROM sqlite_master WHERE type = 'table' AND name = '{tableName}';";
+                    using (var reader = command.ExecuteReader())
                     {
-                        Direction = ParameterDirection.Output
-                    };
-                    command.CommandType = CommandType.Text;
-                    command.Parameters.Add(outputParam);
-                    command.CommandText = $@"IF (EXISTS (SELECT * 
-                                                        FROM INFORMATION_SCHEMA.TABLES
-                                                        WHERE TABLE_SCHEMA = 'dbo'
-                                                        AND TABLE_NAME = '{tableName}'))
-                                                SET @Output = 1
-                                            ELSE
-                                                SET @Output = 0;";
-                    var result = command.ExecuteNonQuery();
-
-                    return (int)outputParam.Value == 1;
+                        while (reader.Read())
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
+
+            return false;
         }
 
         private static IDbConnection CreateConnection(IStore store)
