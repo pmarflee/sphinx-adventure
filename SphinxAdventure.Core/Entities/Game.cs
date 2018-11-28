@@ -11,5 +11,15 @@ namespace SphinxAdventure.Core.Entities
         public Map Map { get; set; }
 
         public Location Location { get; set; }
+
+        internal void MoveToLocation(string locationKey)
+        {
+            if (!Map.Locations.TryGetValue(locationKey, out var location))
+            {
+                throw new InvalidOperationException("Cannot move to location");
+            }
+
+            Location = location;
+        }
     }
 }
