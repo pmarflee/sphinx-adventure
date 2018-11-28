@@ -7,5 +7,7 @@ namespace SphinxAdventure.Core.DTOs
         public Guid Id { get; set; }
 
         public DateTime CreatedOn { get; set; }
+
+        public Location Location { get; set; }
     }
 }
