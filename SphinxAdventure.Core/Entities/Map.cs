@@ -1,4 +1,7 @@
 ﻿using Newtonsoft.Json;
+using SphinxAdventure.Core.Infrastructure.Json.Converters;
+using SphinxAdventure.Core.Infrastructure.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,7 +25,9 @@ namespace SphinxAdventure.Core.Entities
             {
                 using (var reader = new StreamReader(stream))
                 {
-                    return JsonConvert.DeserializeObject<Map>(reader.ReadToEnd());
+                    return JsonConvert.DeserializeObject<Map>(
+                        reader.ReadToEnd(),
+                        new LocationConverter());
                 }
             }
         }
@@ -35,5 +40,32 @@ namespace SphinxAdventure.Core.Entities
         public Dictionary<string, string> Exits { get; set; }
 
         public List<string> Items { get; set; }
+
+        public Location GetNextLocation(string direction, Map map)
+        {
+            if (!Exits.TryGetValue(direction, out var newLocationKey))
+            {
+                throw new InvalidOperationException("Invalid direction");
+            }
+
+            return GetNextLocationInternal(newLocationKey, map);
+        }
+
+        protected virtual Location GetNextLocationInternal(string locationKey, Map map)
+        {
+            return map.Locations[locationKey];
+        }
+    }
+
+    public class Maze : Location
+    {
+        public double Probability { get; set; }
+        
+        protected override Location GetNextLocationInternal(string locationKey, Map map)
+        {
+            return Randomizer.NextValue() > Probability 
+                ? base.GetNextLocationInternal(locationKey, map) 
+                : this;
+        }
     }
 }

@@ -31,5 +31,17 @@ namespace SphinxAdventure.Tests.Core.Entities.Serializers
 
             Assert.Empty(location.Items);
         }
+
+        [Fact]
+        public void ShouldDeserializeLocationElementsWithAProbabilityPropertyToTypeMaze()
+        {
+            Assert.IsType<Maze>(Map.Locations["forest"]);
+        }
+
+        [Fact]
+        public void ShouldDeserializeLocationElementsWithoutAProbabilityPropertyToTypeLocation()
+        {
+            Assert.IsType<Location>(Map.Locations["mountain_top"]);
+        }
     }
 }

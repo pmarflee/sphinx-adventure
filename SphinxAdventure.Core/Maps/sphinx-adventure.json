@@ -19,6 +19,27 @@
         "w": "forest"
       },
       "items": [ "bottle" ]
+    },
+    "forest": {
+      "description": "You are in the forest.",
+      "exits": {
+        "n": "end_of_road",
+        "s": "end_of_road",
+        "e": "end_of_road",
+        "w": "end_of_road"
+      },
+      "items": [],
+      "probability": 0.75
+    },
+    "end_of_road": {
+      "description": "You are at the end of a road, outside a building. All around is forest.",
+      "exits": {
+        "n": "forest",
+        "s": "raised_path",
+        "e": "forest",
+        "w": "forest"
+      },
+      "items": []
     }
   }
 }

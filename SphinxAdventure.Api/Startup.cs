@@ -20,6 +20,7 @@ using System.Linq;
 using SphinxAdventure.Core.Factories;
 using YesSql.Provider.Sqlite;
 using System.IO;
+using SphinxAdventure.Core.Infrastructure.Json.Converters;
 
 namespace SphinxAdventure.Api
 {
@@ -50,6 +51,10 @@ namespace SphinxAdventure.Api
             services.AddMvc(options =>
             {
                 options.Filters.Add(new ProducesAttribute("application/json"));
+            })
+            .AddJsonOptions(options =>
+            {
+                options.SerializerSettings.Converters.Add(new LocationConverter());
             });
 
             services.AddAuthentication(options =>
