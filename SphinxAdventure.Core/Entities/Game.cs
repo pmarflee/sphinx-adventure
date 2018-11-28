@@ -12,14 +12,14 @@ namespace SphinxAdventure.Core.Entities
 
         public Location Location { get; set; }
 
-        internal void MoveToLocation(string locationKey)
+        internal void Move(string direction)
         {
-            if (!Map.Locations.TryGetValue(locationKey, out var location))
+            if (!Location.Exits.TryGetValue(direction, out var newLocationKey))
             {
-                throw new InvalidOperationException("Cannot move to location");
+                throw new InvalidOperationException("Invalid direction");
             }
 
-            Location = location;
+            Location = Map.Locations[newLocationKey];
         }
     }
 }

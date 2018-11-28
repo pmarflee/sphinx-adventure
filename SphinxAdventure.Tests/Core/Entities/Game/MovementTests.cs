@@ -15,27 +15,27 @@ namespace SphinxAdventure.Tests.Core.Entities.Game
         public SphinxAdventure.Core.Entities.Game Game { get; }
 
         [Fact]
-        public void ShouldUpdateLocationIfExitIsAvailable()
+        public void ShouldUpdateLocationIfDirectionIsValid()
         {
-            Game.MoveToLocation("raised_path");
+            Game.Move("n");
 
             Assert.Equal(Game.Map.Locations["raised_path"], Game.Location);
         }
 
         [Fact]
-        public void ShouldThrowInvalidOperationExceptionIfExitIsNotAvailable()
+        public void ShouldThrowInvalidOperationExceptionIfDirectionIsInvalid()
         {
-            Assert.Throws<InvalidOperationException>(() => Game.MoveToLocation("end_of_road"));
+            Assert.Throws<InvalidOperationException>(() => Game.Move("d"));
         }
 
         [Fact]
-        public void ShouldNotUpdateLocationIfExitIsNotAvailable()
+        public void ShouldNotUpdateLocationIfDirectionIsInvalid()
         {
             var originalLocation = Game.Location;
 
             try
             {
-                Game.MoveToLocation("end_of_road");
+                Game.Move("d");
             }
             catch { }
 
