@@ -34,5 +34,19 @@ namespace SphinxAdventure.Core.Entities
 
             Inventory.Add(item);
         }
+
+        internal void DropItem(string item)
+        {
+            var itemIndex = Inventory.IndexOf(item);
+
+            if (itemIndex == -1)
+            {
+                throw new InvalidActionException("Item not present in inventory");
+            }
+
+            Inventory.RemoveAt(itemIndex);
+
+            Location.Items.Add(item);
+        }
     }
 }
