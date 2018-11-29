@@ -48,6 +48,32 @@
         "exit_building": "end_of_road"
       },
       "items": [ "lamp", "keys" ]
+    },
+    "narrow_path": {
+      "description": "You are on a narrow path which seems to descend to the east.",
+      "exits": {
+        "n": "forest",
+        "s": "forest",
+        "e": "valley_of_doom",
+        "w": "raised_path"
+      }
+    },
+    "valley_of_doom": {
+      "description": "You are in the valley of doom. The path disappears down a small shaft here. Strange echoes can be heard from below.",
+      "exits": {
+        "n": "forest",
+        "s": "forest",
+        "e": "forest",
+        "w": "narrow_path",
+        "d": "hall_of_spirits"
+      }
+    },
+    "hall_of_spirits": {
+      "description": "You are in the hall of spirits. Ghostly laughs and howls can be heard echoing around the walls. The air is full of dust and cobwebs.",
+      "exits": {
+        "e": "crossroads",
+        "s": "gardeners_store"
+      }
     }
   },
   "items": {
