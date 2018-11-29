@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using SphinxAdventure.Core.Entities;
+using SphinxAdventure.Tests.TestHelpers;
 using Xunit;
 
 namespace SphinxAdventure.Tests.Core.Entities.Game
@@ -9,7 +10,7 @@ namespace SphinxAdventure.Tests.Core.Entities.Game
     {
         public MovementTests()
         {
-            Game = CreateGame();
+            Game = GameFactory.Create();
         }
 
         public SphinxAdventure.Core.Entities.Game Game { get; }
@@ -47,7 +48,7 @@ namespace SphinxAdventure.Tests.Core.Entities.Game
         {
             (Location, Location) Locations()
             {
-                var game = CreateGame("forest");
+                var game = GameFactory.Create("forest");
                 var originalLocation = game.Location;
 
                 game.Move("n");
@@ -65,7 +66,7 @@ namespace SphinxAdventure.Tests.Core.Entities.Game
         {
             (Location, Location) Locations()
             {
-                var game = CreateGame("forest");
+                var game = GameFactory.Create("forest");
                 var originalLocation = game.Location;
 
                 game.Move("n");
@@ -76,19 +77,6 @@ namespace SphinxAdventure.Tests.Core.Entities.Game
             var locations = Enumerable.Range(0, 100).Select(i => Locations());
 
             Assert.Contains(locations, pair => pair.Item1 != pair.Item2);
-        }
-
-        private SphinxAdventure.Core.Entities.Game CreateGame(string location = null)
-        {
-            var map = Map.LoadFromResourceFile();
-
-            return new SphinxAdventure.Core.Entities.Game
-            {
-                UserId = Guid.NewGuid(),
-                CreatedOn = DateTime.Now,
-                Map = map,
-                Location = location != null ? map.Locations[location] : map.Locations.First().Value
-            };
         }
     }
 }
