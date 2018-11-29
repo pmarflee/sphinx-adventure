@@ -21,6 +21,8 @@ using SphinxAdventure.Core.Factories;
 using YesSql.Provider.Sqlite;
 using System.IO;
 using SphinxAdventure.Core.Infrastructure.Json.Converters;
+using SphinxAdventure.Core.Infrastructure.Json.ContractResolvers;
+using SphinxAdventure.Core.Infrastructure.Json;
 
 namespace SphinxAdventure.Api
 {
@@ -55,6 +57,8 @@ namespace SphinxAdventure.Api
             .AddJsonOptions(options =>
             {
                 options.SerializerSettings.Converters.Add(new LocationConverter());
+                options.SerializerSettings.ContractResolver =
+                    new PrivateSetterCamelCasePropertyNamesContractResolver();
             });
 
             services.AddAuthentication(options =>
@@ -80,7 +84,11 @@ namespace SphinxAdventure.Api
                 };
             });
 
-            services.AddDbProvider(config => config.UseSqLite($"Data Source={DatabaseFilePath}"));
+            services.AddDbProvider(config => 
+            {
+                config.UseSqLite($"Data Source={DatabaseFilePath}");
+                config.ContentSerializer = new JsonContentSerializer();
+            });
 
             services.AddSingleton<IRepository<Game>, GameRepository>();
             services.AddSingleton<IRepository<User>, UserRepository>();

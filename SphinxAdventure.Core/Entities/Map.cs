@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SphinxAdventure.Core.Entities.Exceptions;
+using SphinxAdventure.Core.Infrastructure.Json;
+using SphinxAdventure.Core.Infrastructure.Json.ContractResolvers;
 using SphinxAdventure.Core.Infrastructure.Json.Converters;
 using SphinxAdventure.Core.Infrastructure.Utils;
 using System.Collections.Generic;
@@ -13,6 +15,9 @@ namespace SphinxAdventure.Core.Entities
     {
         private const string ResourceFileName = "sphinx-adventure.json";
 
+        private static readonly YesSql.IContentSerializer _contentSerializer = 
+            new JsonContentSerializer();
+
         public Dictionary<string, Location> Locations { get; set; }
 
         internal static Map LoadFromResourceFile()
@@ -25,9 +30,7 @@ namespace SphinxAdventure.Core.Entities
             {
                 using (var reader = new StreamReader(stream))
                 {
-                    return JsonConvert.DeserializeObject<Map>(
-                        reader.ReadToEnd(),
-                        new LocationConverter());
+                    return (Map)_contentSerializer.Deserialize(reader.ReadToEnd(), typeof(Map));
                 }
             }
         }
