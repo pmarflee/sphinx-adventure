@@ -37,9 +37,17 @@
         "n": "forest",
         "s": "raised_path",
         "e": "forest",
-        "w": "forest"
+        "w": "forest",
+        "enter_building": "forge"
       },
       "items": []
+    },
+    "forge": {
+      "description": "You are in the building, obviously an old blacksmith's forge.",
+      "exits": {
+        "exit_building": "end_of_road"
+      },
+      "items": [ "lamp", "keys" ]
     }
   }
 }
