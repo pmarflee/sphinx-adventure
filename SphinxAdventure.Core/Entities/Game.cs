@@ -18,7 +18,12 @@ namespace SphinxAdventure.Core.Entities
 
         internal void Move(string direction)
         {
-            Location = Location.GetNextLocation(direction, Map);
+            if (!Location.Exits.TryGetValue(direction, out var newLocationKey))
+            {
+                throw new InvalidActionException("Invalid direction");
+            }
+
+            ApplyCharacteristics(() => Location = Map.Locations[newLocationKey]);
         }
 
         internal void PickUpItem(string item)
@@ -47,6 +52,14 @@ namespace SphinxAdventure.Core.Entities
             Inventory.RemoveAt(itemIndex);
 
             Location.Items.Add(item);
+        }
+
+        private void ApplyCharacteristics(Action action)
+        {
+            foreach (var characteristic in Location.Characteristics)
+            {
+                characteristic.Handle(this, action);
+            }
         }
     }
 }

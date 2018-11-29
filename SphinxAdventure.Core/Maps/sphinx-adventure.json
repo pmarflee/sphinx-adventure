@@ -29,7 +29,12 @@
         "w": "end_of_road"
       },
       "items": [],
-      "probability": 0.75
+      "characteristics": [
+        {
+          "type": "maze",
+          "probability": 0.75
+        }
+      ]
     },
     "end_of_road": {
       "description": "You are at the end of a road, outside a building. All around is forest.",

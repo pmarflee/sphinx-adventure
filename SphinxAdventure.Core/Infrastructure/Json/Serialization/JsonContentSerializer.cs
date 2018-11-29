@@ -33,7 +33,7 @@ namespace SphinxAdventure.Core.Infrastructure.Json
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 ContractResolver = new PrivateSetterCamelCasePropertyNamesContractResolver(),
             };
-            settings.Converters.Add(new LocationConverter());
+            settings.Converters.Add(new CharacteristicConverter());
 
             return settings;
         }

@@ -1,13 +1,10 @@
-﻿using Newtonsoft.Json;
-using SphinxAdventure.Core.Entities.Exceptions;
+﻿using SphinxAdventure.Core.Entities.Characteristics;
 using SphinxAdventure.Core.Infrastructure.Json;
-using SphinxAdventure.Core.Infrastructure.Json.ContractResolvers;
-using SphinxAdventure.Core.Infrastructure.Json.Converters;
-using SphinxAdventure.Core.Infrastructure.Utils;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace SphinxAdventure.Core.Entities
 {
@@ -46,31 +43,15 @@ namespace SphinxAdventure.Core.Entities
 
         public List<string> Items { get; set; }
 
-        public Location GetNextLocation(string direction, Map map)
+        public List<ICharacteristic> Characteristics { get; private set; } = new List<ICharacteristic>();
+
+        [OnDeserialized]
+        internal void OnDeserialized(StreamingContext ctx)
         {
-            if (!Exits.TryGetValue(direction, out var newLocationKey))
+            if (Characteristics.Count == 0)
             {
-                throw new InvalidActionException("Invalid direction");
+                Characteristics.Add(DefaultCharacteristic.Instance);
             }
-
-            return GetNextLocationInternal(newLocationKey, map);
-        }
-
-        protected virtual Location GetNextLocationInternal(string locationKey, Map map)
-        {
-            return map.Locations[locationKey];
-        }
-    }
-
-    public class Maze : Location
-    {
-        public double Probability { get; set; }
-        
-        protected override Location GetNextLocationInternal(string locationKey, Map map)
-        {
-            return Randomizer.NextValue() > Probability 
-                ? base.GetNextLocationInternal(locationKey, map) 
-                : this;
         }
     }
 

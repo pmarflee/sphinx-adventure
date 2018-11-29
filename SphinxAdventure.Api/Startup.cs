@@ -56,7 +56,7 @@ namespace SphinxAdventure.Api
             })
             .AddJsonOptions(options =>
             {
-                options.SerializerSettings.Converters.Add(new LocationConverter());
+                options.SerializerSettings.Converters.Add(new CharacteristicConverter());
                 options.SerializerSettings.ContractResolver =
                     new PrivateSetterCamelCasePropertyNamesContractResolver();
             });

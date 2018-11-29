@@ -1,4 +1,6 @@
 ﻿using SphinxAdventure.Core.Entities;
+using SphinxAdventure.Core.Entities.Characteristics;
+using System.Linq;
 using Xunit;
 
 namespace SphinxAdventure.Tests.Core.Entities.Serializers
@@ -33,15 +35,27 @@ namespace SphinxAdventure.Tests.Core.Entities.Serializers
         }
 
         [Fact]
-        public void ShouldDeserializeLocationElementsWithAProbabilityPropertyToTypeMaze()
+        public void ForestLocationShouldHaveAMazeCharacteristic()
         {
-            Assert.IsType<Maze>(Map.Locations["forest"]);
+            Assert.Contains(
+                Map.Locations["forest"].Characteristics,
+                item => item is MazeCharacteristic);
         }
 
         [Fact]
-        public void ShouldDeserializeLocationElementsWithoutAProbabilityPropertyToTypeLocation()
+        public void ForestLocationShouldNotHaveAMazeCharacteristic()
         {
-            Assert.IsType<Location>(Map.Locations["mountain_top"]);
+            Assert.DoesNotContain(
+                Map.Locations["forest"].Characteristics,
+                item => item is DefaultCharacteristic);
+        }
+
+        [Fact]
+        public void MountainTopLocationShouldHaveADefaultCharacteristic()
+        {
+            Assert.Contains(
+                Map.Locations["mountain_top"].Characteristics,
+                item => item is DefaultCharacteristic);
         }
 
         [Fact]
