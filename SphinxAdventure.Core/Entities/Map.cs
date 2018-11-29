@@ -20,6 +20,8 @@ namespace SphinxAdventure.Core.Entities
 
         public Dictionary<string, Location> Locations { get; set; }
 
+        public Dictionary<string, Item> Items { get; set; }
+
         internal static Map LoadFromResourceFile()
         {
             var assembly = Assembly.GetExecutingAssembly();
@@ -70,5 +72,10 @@ namespace SphinxAdventure.Core.Entities
                 ? base.GetNextLocationInternal(locationKey, map) 
                 : this;
         }
+    }
+
+    public class Item
+    {
+        public string Description { get; set; }
     }
 }

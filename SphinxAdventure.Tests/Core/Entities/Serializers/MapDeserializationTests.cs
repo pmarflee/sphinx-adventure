@@ -43,5 +43,15 @@ namespace SphinxAdventure.Tests.Core.Entities.Serializers
         {
             Assert.IsType<Location>(Map.Locations["mountain_top"]);
         }
+
+        [Fact]
+        public void ShouldDeserializeItems()
+        {
+            Assert.NotNull(Map.Items);
+
+            Assert.True(Map.Items.TryGetValue("bottle", out _));
+            Assert.True(Map.Items.TryGetValue("lamp", out _));
+            Assert.True(Map.Items.TryGetValue("keys", out _));
+        }
     }
 }

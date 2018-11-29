@@ -49,5 +49,16 @@
       },
       "items": [ "lamp", "keys" ]
     }
+  },
+  "items": {
+    "bottle": {
+      "description": "a bottle"
+    },
+    "lamp": {
+      "description": "a lamp"
+    },
+    "keys": {
+      "description": "a set of keys"
+    }
   }
 }
