@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using SphinxAdventure.Core.Entities;
+using SphinxAdventure.Core.Entities.Exceptions;
 using SphinxAdventure.Tests.TestHelpers;
 using Xunit;
 
@@ -26,7 +27,7 @@ namespace SphinxAdventure.Tests.Core.Entities.Game
         [Fact]
         public void ShouldThrowInvalidOperationExceptionIfDirectionIsInvalid()
         {
-            Assert.Throws<InvalidOperationException>(() => Game.Move("d"));
+            Assert.Throws<InvalidActionException>(() => Game.Move("d"));
         }
 
         [Fact]

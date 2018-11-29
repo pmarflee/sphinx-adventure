@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
+using SphinxAdventure.Core.Entities.Exceptions;
 using SphinxAdventure.Core.Infrastructure.Json.Converters;
 using SphinxAdventure.Core.Infrastructure.Utils;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -45,7 +45,7 @@ namespace SphinxAdventure.Core.Entities
         {
             if (!Exits.TryGetValue(direction, out var newLocationKey))
             {
-                throw new InvalidOperationException("Invalid direction");
+                throw new InvalidActionException("Invalid direction");
             }
 
             return GetNextLocationInternal(newLocationKey, map);
