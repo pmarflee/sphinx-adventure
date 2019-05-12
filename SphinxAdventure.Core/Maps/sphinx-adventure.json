@@ -31,7 +31,7 @@
       "items": [],
       "characteristics": [
         {
-          "type": "maze",
+          "type": "ismaze",
           "probability": 0.75
         }
       ]
@@ -78,7 +78,8 @@
       "exits": {
         "e": "crossroads",
         "s": "gardeners_store"
-      }
+      },
+      "characteristics": [ "isdark" ]
     }
   },
   "items": {
@@ -91,5 +92,14 @@
     "keys": {
       "description": "a set of keys"
     }
+  },
+  "characteristics": {
+    "isdark": {
+      "probability": 0.5,
+      "descriptions": [
+        "IT'S VERY DARK.",
+        "IF YOU MOVE YOU MAY FALL INTO A PIT."
+      ]
+    }  
   }
 }

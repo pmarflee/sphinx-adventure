@@ -1,22 +1,21 @@
 ﻿using SphinxAdventure.Core.Entities;
 using System;
-using System.Linq;
 
 namespace SphinxAdventure.Tests.TestHelpers
 {
     internal static class GameFactory
     {
-        public static Game Create(string location = null)
+        public static Game Create(string location = null, Func<double> randomNumberGenerator = null)
         {
             var map = Map.LoadFromResourceFile();
 
-            return new Game
-            {
-                UserId = Guid.NewGuid(),
-                CreatedOn = DateTime.Now,
-                Map = map,
-                Location = location != null ? map.Locations[location] : map.Locations.First().Value
-            };
+            return new Game(
+                Guid.NewGuid(), 
+                Guid.NewGuid(), 
+                map, 
+                DateTime.Now, 
+                location, 
+                randomNumberGenerator);
         }
     }
 }

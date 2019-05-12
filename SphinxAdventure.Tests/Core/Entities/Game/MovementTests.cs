@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using SphinxAdventure.Core.Entities;
-using SphinxAdventure.Core.Entities.Exceptions;
+﻿using SphinxAdventure.Core.Entities.Exceptions;
 using SphinxAdventure.Tests.TestHelpers;
 using Xunit;
 
@@ -45,39 +42,25 @@ namespace SphinxAdventure.Tests.Core.Entities.Game
         }
 
         [Fact]
-        public void ShouldNotAlwaysMoveWhenCurrentLocationIsAMaze()
+        public void ShouldRemainInCurrentLocationWhenCurrentLocationIsAMazeAndRandomNumberDoesNotExceedProbability()
         {
-            (Location, Location) Locations()
-            {
-                var game = GameFactory.Create("forest");
-                var originalLocation = game.Location;
+            var game = GameFactory.Create("forest", () => 0.5);
+            var originalLocation = game.Location;
 
-                game.Move("n");
+            game.Move("n");
 
-                return (originalLocation, game.Location);
-            }
-
-            var locations = Enumerable.Range(0, 100).Select(i => Locations());
-
-            Assert.Contains(locations, pair => pair.Item1 == pair.Item2);
+            Assert.Equal(originalLocation, game.Location);
         }
 
         [Fact]
-        public void ShouldNotAlwaysRemainInCurrentLocationWhenCurrentLocationIsAMaze()
+        public void ShouldNotRemainInCurrentLocationWhenCurrentLocationIsAMazeAndRandomNumberDoesExceedProbability()
         {
-            (Location, Location) Locations()
-            {
-                var game = GameFactory.Create("forest");
-                var originalLocation = game.Location;
+            var game = GameFactory.Create("forest", () => 0.9);
+            var originalLocation = game.Location;
 
-                game.Move("n");
+            game.Move("n");
 
-                return (originalLocation, game.Location);
-            }
-
-            var locations = Enumerable.Range(0, 100).Select(i => Locations());
-
-            Assert.Contains(locations, pair => pair.Item1 != pair.Item2);
+            Assert.NotEqual(originalLocation, game.Location);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace SphinxAdventure.Core.Factories
 {
-    public interface IFactory<T>
+    public interface IFactory<TObject, TProps>
     {
-        T Create();
+        TObject Create(TProps props);
     }
 }

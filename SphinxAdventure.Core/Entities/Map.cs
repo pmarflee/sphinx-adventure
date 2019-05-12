@@ -43,7 +43,7 @@ namespace SphinxAdventure.Core.Entities
 
         public List<string> Items { get; set; }
 
-        public List<ICharacteristic> Characteristics { get; private set; } = new List<ICharacteristic>();
+        public List<LocationCharacteristic> Characteristics { get; private set; } = new List<LocationCharacteristic>();
 
         [OnDeserialized]
         internal void OnDeserialized(StreamingContext ctx)
@@ -58,5 +58,16 @@ namespace SphinxAdventure.Core.Entities
     public class Item
     {
         public string Description { get; set; }
+
+        private List<string> Characteristics { get; set; } = new List<string>();
+
+        public void AddCharacteristic(string characteristic) 
+            => Characteristics.Add(characteristic);
+
+        public void RemoveCharacteristic(string characteristic) 
+            => Characteristics.Remove(characteristic);
+
+        public bool HasCharacteristic(string characteristic) 
+            => Characteristics.Contains(characteristic);
     }
 }

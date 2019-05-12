@@ -1,5 +1,6 @@
 ﻿using SphinxAdventure.Core.Entities;
 using SphinxAdventure.Core.Infrastructure.Indexes.MappedIndexes;
+using SphinxAdventure.Core.Infrastructure.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,8 +10,19 @@ namespace SphinxAdventure.Core.Infrastructure.Repositories
 {
     public class GameRepository : BaseRepository<Game, GameById>
     {
-        public GameRepository(IStore store) : base(store)
+        private readonly IRandomNumberGenerator _randomNumberGenerator;
+
+        public GameRepository(IStore store, IRandomNumberGenerator randomNumberGenerator) : base(store)
         {
+            _randomNumberGenerator = randomNumberGenerator;
+        }
+
+        public async override Task<Game> GetAsync(Guid id)
+        {
+            var game = await base.GetAsync(id);
+            game.NextRandomNumber = _randomNumberGenerator.Next;
+
+            return game;
         }
     }
 

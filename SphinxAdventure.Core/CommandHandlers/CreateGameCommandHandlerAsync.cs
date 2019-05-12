@@ -12,31 +12,22 @@ namespace SphinxAdventure.Core.CommandHandlers
 {
     public class CreateGameCommandHandlerAsync : RequestHandlerAsync<CreateGameCommand>
     {
-        private readonly IFactory<Map> _mapFactory;
+        private readonly IFactory<Game, GameProps> _gameFactory;
         private readonly IRepository<Game> _gameRepository;
 
         public CreateGameCommandHandlerAsync(
-            IFactory<Map> mapFactory,
+            IFactory<Game, GameProps> gameFactory,
             IRepository<Game> gameRepository)
         {
-            _mapFactory = mapFactory;
+            _gameFactory = gameFactory;
             _gameRepository = gameRepository;
         }
 
         public override async Task<CreateGameCommand> HandleAsync(
             CreateGameCommand command, 
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
-            var map = _mapFactory.Create();
-
-            var game = new Game
-            {
-                EntityId = command.Id,
-                UserId = command.UserId,
-                Map = map,
-                Location = map.Locations.Values.First(),
-                CreatedOn = command.CreatedOn
-            };
+            var game = _gameFactory.Create(new GameProps(command.Id, command.UserId, command.CreatedOn));
 
             await _gameRepository.SaveAsync(game);
 

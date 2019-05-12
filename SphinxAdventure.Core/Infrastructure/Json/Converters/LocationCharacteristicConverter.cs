@@ -7,36 +7,52 @@ using System.Reflection;
 
 namespace SphinxAdventure.Core.Infrastructure.Json.Converters
 {
-    public class CharacteristicConverter : JsonConverter
+    public class LocationCharacteristicConverter : JsonConverter
     {
         private static readonly Type[] _characteristicTypes;
         
-        static CharacteristicConverter()
+        static LocationCharacteristicConverter()
         {
-            var characteristicType = typeof(ICharacteristic);
+            var characteristicType = typeof(LocationCharacteristic);
 
             _characteristicTypes = (from type in Assembly.GetExecutingAssembly().GetTypes()
-                                where !type.IsInterface
+                                where !type.IsAbstract
                                 where characteristicType.IsAssignableFrom(type)
                                 select type).ToArray();
         }
 
         public override bool CanRead => true;
         public override bool CanWrite => false;
-        public override bool CanConvert(Type objectType) => objectType == typeof(ICharacteristic);
+        public override bool CanConvert(Type objectType) => objectType == typeof(LocationCharacteristic);
 
         public override object ReadJson(
             JsonReader reader, Type objectType,
             object existingValue, JsonSerializer serializer)
         {
-            var jsonObject = JObject.Load(reader);
-            var characteristicType = jsonObject["type"].ToString();
+            (string, bool, JObject) Load()
+            {
+                if (reader.Value is string stringValue)
+                {
+                    return (stringValue, false, null);
+                }
+                else
+                {
+                    var obj = JObject.Load(reader);
+                    return (obj["type"].ToString(), true, obj);
+                }
+            }
+
+            (var characteristicType, var populate, var jsonObject) = Load();
+
             var characteristicObjectType = _characteristicTypes.First(
                 type => type.Name.StartsWith(characteristicType, 
                 StringComparison.InvariantCultureIgnoreCase));
             var characteristic = Activator.CreateInstance(characteristicObjectType);
 
-            serializer.Populate(jsonObject.CreateReader(), characteristic);
+            if (populate)
+            {
+                serializer.Populate(jsonObject.CreateReader(), characteristic);
+            }
 
             return characteristic;
         }

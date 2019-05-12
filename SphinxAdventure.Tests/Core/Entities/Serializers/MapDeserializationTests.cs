@@ -39,7 +39,7 @@ namespace SphinxAdventure.Tests.Core.Entities.Serializers
         {
             Assert.Contains(
                 Map.Locations["forest"].Characteristics,
-                item => item is MazeCharacteristic);
+                item => item is IsMazeCharacteristic);
         }
 
         [Fact]

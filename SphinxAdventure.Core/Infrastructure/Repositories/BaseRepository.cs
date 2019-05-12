@@ -17,7 +17,7 @@ namespace SphinxAdventure.Core.Infrastructure.Repositories
 
         public ISession CreateSession() => Store.CreateSession();
 
-        public async Task<TEntity> GetAsync(Guid id)
+        public async virtual Task<TEntity> GetAsync(Guid id)
         {
             using (var session = Store.CreateSession())
             {
@@ -26,7 +26,7 @@ namespace SphinxAdventure.Core.Infrastructure.Repositories
             }
         }
                 
-        public async Task<TEntity> SaveAsync(TEntity entity)
+        public async virtual Task<TEntity> SaveAsync(TEntity entity)
         {
             using (var session = Store.CreateSession())
             {

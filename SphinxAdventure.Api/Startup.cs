@@ -23,6 +23,7 @@ using System.IO;
 using SphinxAdventure.Core.Infrastructure.Json.Converters;
 using SphinxAdventure.Core.Infrastructure.Json.ContractResolvers;
 using SphinxAdventure.Core.Infrastructure.Json;
+using SphinxAdventure.Core.Infrastructure.Utils;
 
 namespace SphinxAdventure.Api
 {
@@ -56,7 +57,7 @@ namespace SphinxAdventure.Api
             })
             .AddJsonOptions(options =>
             {
-                options.SerializerSettings.Converters.Add(new CharacteristicConverter());
+                options.SerializerSettings.Converters.Add(new LocationCharacteristicConverter());
                 options.SerializerSettings.ContractResolver =
                     new PrivateSetterCamelCasePropertyNamesContractResolver();
             });
@@ -92,7 +93,9 @@ namespace SphinxAdventure.Api
 
             services.AddSingleton<IRepository<Game>, GameRepository>();
             services.AddSingleton<IRepository<User>, UserRepository>();
-            services.AddSingleton<IFactory<Map>, MapFactory>();
+            services.AddSingleton<IFactory<Map, MapProps>, MapFactory>();
+            services.AddSingleton<IFactory<Game, GameProps>, GameFactory>();
+            services.AddSingleton<IRandomNumberGenerator, RandomNumberGenerator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

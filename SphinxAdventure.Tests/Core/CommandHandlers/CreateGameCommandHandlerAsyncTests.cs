@@ -7,18 +7,17 @@ using SphinxAdventure.Core.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace SphinxAdventure.Tests.Core.CommandHandlers
 {
     public class CreateGameCommandHandlerAsyncTests
     {
-        private readonly IFactory<Map> _mapFactory;
+        private readonly IFactory<Game, GameProps> _gameFactory;
         private readonly IRepository<Game> _gameRepository;
         private readonly CreateGameCommandHandlerAsync _handler;
-        private readonly Map _map;
         private readonly CreateGameCommand _command = new CreateGameCommand(Guid.NewGuid());
+        private readonly Map _map;
 
         public CreateGameCommandHandlerAsyncTests()
         {
@@ -35,12 +34,16 @@ namespace SphinxAdventure.Tests.Core.CommandHandlers
                 }
             };
 
-            _mapFactory = Substitute.For<IFactory<Map>>();
-            _mapFactory.Create().Returns(_map);
+            _gameFactory = Substitute.For<IFactory<Game, GameProps>>();
+            _gameFactory.Create(Arg.Any<GameProps>()).Returns(info =>
+            {
+                var props = info.Arg<GameProps>();
+                return new Game(props.Id, props.UserId, _map, DateTime.Now);
+            });
 
             _gameRepository = Substitute.For<IRepository<Game>>();
 
-            _handler = new CreateGameCommandHandlerAsync(_mapFactory, _gameRepository);
+            _handler = new CreateGameCommandHandlerAsync(_gameFactory, _gameRepository);
         }
 
         [Fact]

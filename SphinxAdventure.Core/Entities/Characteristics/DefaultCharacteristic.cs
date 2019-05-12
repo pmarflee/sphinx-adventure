@@ -2,14 +2,11 @@
 
 namespace SphinxAdventure.Core.Entities.Characteristics
 {
-    public class DefaultCharacteristic : ICharacteristic
+    public class DefaultCharacteristic : LocationCharacteristic
     {
-        public string Key => "default";
+        public override bool IsApplicableTo(Game game) => true;
 
-        public void Handle(Game game, Action action)
-        {
-            action();
-        }
+        protected override void HandleActionInternal(Game game, Action action) => action();
 
         public static readonly DefaultCharacteristic Instance = new DefaultCharacteristic();
     }

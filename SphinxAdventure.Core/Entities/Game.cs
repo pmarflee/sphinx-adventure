@@ -1,20 +1,53 @@
-﻿using SphinxAdventure.Core.Entities.Exceptions;
+﻿using Newtonsoft.Json;
+using SphinxAdventure.Core.Entities.Exceptions;
+using SphinxAdventure.Core.Infrastructure.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SphinxAdventure.Core.Entities
 {
     public class Game : Entity
     {
-        public Guid UserId { get; set; }
+        [JsonConstructor]
+        public Game()
+        {
 
-        public DateTime CreatedOn { get; set; }
+        }
 
-        public Map Map { get; set; }
+        public Game(Guid entityId, Guid userId, Map map, DateTime createdOn, 
+            string location = null, Func<double> nextRandomNumber = null)
+        {
+            EntityId = entityId;
+            UserId = userId;
+            Map = map;
+            CreatedOn = createdOn;
+            Location = !string.IsNullOrEmpty(location)
+                ? map.Locations[location] 
+                : map.Locations.Values.FirstOrDefault();
+            if (nextRandomNumber != null)
+            {
+                NextRandomNumber = nextRandomNumber;
+            }
+        }
 
-        public Location Location { get; set; }
+        public Guid UserId { get; }
+
+        public DateTime CreatedOn { get; }
+
+        public Map Map { get; }
+
+        public Location Location { get; private set; }
+
+        public Dictionary<string, Item> Items { get; private set; } = new Dictionary<string, Item>();
 
         public List<string> Inventory { get; private set; } = new List<string>();
+
+        public bool InProgress { get; internal set; }
+
+        public bool PlayerKilled { get; internal set; }
+
+        public Func<double> NextRandomNumber { get; internal set; }
 
         internal void Move(string direction)
         {
@@ -58,7 +91,7 @@ namespace SphinxAdventure.Core.Entities
         {
             foreach (var characteristic in Location.Characteristics)
             {
-                characteristic.Handle(this, action);
+                characteristic.HandleAction(this, action);
             }
         }
     }
